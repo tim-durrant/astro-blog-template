@@ -20,22 +20,20 @@ jobs:
 
       - name: Create and Bootstrap Astro Project
         run: |
-          mkdir blog
-          cd blog
           # One-liner to create a beautiful blog
           npm create astro@latest . -- --template trevortylerlee/astro-micro --yes
 
       - name: Remove template's git history
-        run: rm -rf blog/.git
+        run: rm -rf ./.git
 
       - name: Commit new blog files
         run: |
           git config --global user.name 'GitHub Actions Bot'
           git config --global user.email 'actions-bot@github.com'
-          git add blog/
+          git add .
           if git diff --staged --quiet; then
             echo "No changes to commit."
           else
-            git commit -m "feat: Bootstrap Astro Micro blog"
+            git commit -m "feat: Bootstrap Astro blog"
             git push
           fi
