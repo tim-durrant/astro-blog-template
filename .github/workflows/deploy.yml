@@ -18,21 +18,21 @@ jobs:
         with:
           node-version: '20'
           cache: 'npm'
-          cache-dependency-path: 'blog/package-lock.json'
+          cache-dependency-path: './package-lock.json'
 
       - name: Install dependencies
-        working-directory: ./blog
+        working-directory: .
         run: npm ci
 
       - name: Build
-        working-directory: ./blog
+        working-directory: .
         run: npm run build
 
       - name: Upload artifact
         uses: actions/upload-artifact@v3
         with:
           name: astro-build-output
-          path: blog/dist
+          path: ./dist
 
   deploy:
     needs: build
@@ -45,7 +45,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: astro-build-output
-          path: ./blog/dist
+          path: ./dist
 
       - name: Create Cloudflare Pages project if needed
         uses: cloudflare/wrangler-action@v3
@@ -60,4 +60,4 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy ./blog/dist --project-name=${{ github.event.repository.name }} --branch=${{ github.ref_name }}
+          command: pages deploy ./dist --project-name=${{ github.event.repository.name }} --branch=${{ github.ref_name }}
