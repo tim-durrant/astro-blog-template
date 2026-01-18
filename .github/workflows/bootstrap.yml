@@ -1,0 +1,41 @@
+name: Bootstrap Astro Blog
+on:
+  workflow_dispatch: # The magic "Run Workflow" button
+
+permissions:
+  contents: write # Let the workflow commit files
+
+jobs:
+  bootstrap:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          # No caching yet - we're creating the files that would be cached!
+
+      - name: Create and Bootstrap Astro Project
+        run: |
+          mkdir blog
+          cd blog
+          # One-liner to create a beautiful blog
+          npm create astro@latest . -- --template trevortylerlee/astro-micro --yes
+
+      - name: Remove template's git history
+        run: rm -rf blog/.git
+
+      - name: Commit new blog files
+        run: |
+          git config --global user.name 'GitHub Actions Bot'
+          git config --global user.email 'actions-bot@github.com'
+          git add blog/
+          if git diff --staged --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "feat: Bootstrap Astro Micro blog"
+            git push
+          fi
