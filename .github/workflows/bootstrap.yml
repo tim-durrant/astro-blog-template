@@ -21,7 +21,7 @@ jobs:
       - name: Create and Bootstrap Astro Project
         run: |
           # Create in a temp directory
-          npm create astro@latest temp-blog -- --template trevortylerlee/astro-micro --yes
+          npm create astro@latest temp-blog -- --template themefisher/bookworm-light-astro --yes
           # Remove the template's git folder BEFORE moving
           rm -rf temp-blog/.git
           # Move everything from temp directory to root
